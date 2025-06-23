@@ -13,14 +13,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-def calculate_batch_size(world_size):
+def calculate_batch_size(world_size, total_memory=84):
     """Calculate batch size given world size"""
     if world_size <= 0:
         return 0
     
     # Memory formula: b*0.92 + 235/world_size + 8 = 141
     # Solve for b: b = (133 - 235/world_size) / 0.92
-    batch_size = (133 - 235/world_size) / 0.92
+    batch_size = (total_memory - 8 - 235/world_size) / 0.92
     return max(0, batch_size)  # Ensure non-negative
 
 def calculate_moe_metrics(world_size, batch_size, num_experts=128, topk=8):

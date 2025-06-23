@@ -581,7 +581,7 @@ if __name__ == "__main__":
     
     # 计算解码阶段统计信息
     print("\n🎯 解码阶段分析:")
-    calculate_model_decode_stats(batch_size=128, prefix_length=4096, show_memory=True)
+    calculate_model_decode_stats(batch_size=112, prefix_length=4096, show_memory=True)
     
     # 预填充vs解码对比
     compare_prefill_vs_decode()
