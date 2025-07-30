@@ -262,7 +262,7 @@ def calculate_model_decode_stats(batch_size=1, prefix_length=2048, show_memory=T
 
     # QKV Proj
     qkv_proj_flops = 2 * batch_size * new_token_len * hidden_size * (num_q_heads + 2 * num_kv_heads) * head_dim
-    qkv_proj_mem_access = (batch_size * new_token_len * hidden_size * bf16_size) + \
+    qkv_proj_mem_access = (batch_size * new_token_len * hidden_size * fp8_size) + \
                           (batch_size * (num_q_heads + 2 * num_kv_heads) * head_dim * bf16_size) + \
                           (hidden_size * (num_q_heads + 2 * num_kv_heads) * head_dim * fp8_size)
     
