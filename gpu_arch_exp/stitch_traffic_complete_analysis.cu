@@ -54,6 +54,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <vector>
+#include <algorithm>
+#include <random>
+#include <cstdlib>
 
 #define CUDA_CHECK(call) do { \
     cudaError_t err = call; \
@@ -459,8 +462,144 @@ __global__ __noinline__ void bandwidth_stress_test(float* data, size_t total_ele
 }
 
 // ============================================================
+// 对比实验 Kernels (清晰展示 Stitch 影响)
+// ============================================================
+
+// 对比实验A: 本地连续访问 (基准)
+__global__ __noinline__ void compare_local_access(float* __restrict__ data, 
+                                                   float* __restrict__ output,
+                                                   size_t elements,
+                                                   int iterations) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    int total_threads = gridDim.x * blockDim.x;
+    
+    float sum = 0.0f;
+    
+    // 每个线程访问一小块连续内存（局部性高）
+    size_t chunk_size = elements / total_threads;
+    size_t start = tid * chunk_size;
+    size_t end = (start + chunk_size < elements) ? start + chunk_size : elements;
+    
+    for (int iter = 0; iter < iterations; iter++) {
+        for (size_t i = start; i < end; i++) {
+            sum += __ldcg(&data[i]);
+        }
+    }
+    
+    if (tid == 0) output[0] = sum;
+}
+
+// 对比实验A: 跨 Partition 访问（大步长）
+__global__ __noinline__ void compare_cross_partition(float* __restrict__ data,
+                                                      float* __restrict__ output,
+                                                      size_t elements,
+                                                      int iterations,
+                                                      size_t stride) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    int total_threads = gridDim.x * blockDim.x;
+    
+    float sum = 0.0f;
+    
+    size_t accesses_per_thread = elements / total_threads;
+    
+    for (int iter = 0; iter < iterations; iter++) {
+        for (size_t i = 0; i < accesses_per_thread; i++) {
+            // 使用大步长访问，跨越多个 L2 partition
+            size_t idx = (tid + i * stride) % elements;
+            sum += __ldcg(&data[idx]);
+        }
+    }
+    
+    if (tid == 0) output[0] = sum;
+}
+
+// 对比实验B: 单 Buffer 3x 访问（L2 命中率高）
+__global__ __noinline__ void compare_single_buffer_3x(float* __restrict__ data,
+                                                       float* __restrict__ output,
+                                                       size_t elements,
+                                                       int iterations) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    float sum = 0.0f;
+    
+    for (int iter = 0; iter < iterations; iter++) {
+        for (int i = 0; i < 32; i++) {
+            size_t idx = (tid * 32 + i) % elements;
+            // 同一地址访问3次，模拟 3 buffer 但复用地址
+            sum += __ldcg(&data[idx]);
+            sum += __ldcg(&data[idx]);
+            sum += __ldcg(&data[idx]);
+        }
+    }
+    
+    if (tid == 0) output[0] = sum;
+}
+
+// 对比实验B: 多 Buffer QKV 访问（3倍唯一地址）
+__global__ __noinline__ void compare_multi_buffer_qkv(float* __restrict__ Q,
+                                                       float* __restrict__ K,
+                                                       float* __restrict__ V,
+                                                       float* __restrict__ output,
+                                                       size_t elements,
+                                                       int iterations) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    float sum = 0.0f;
+    
+    for (int iter = 0; iter < iterations; iter++) {
+        for (int i = 0; i < 32; i++) {
+            size_t idx = (tid * 32 + i) % elements;
+            // 交替访问 Q, K, V - 3倍唯一地址
+            sum += __ldcg(&Q[idx]);
+            sum += __ldcg(&K[idx]);
+            sum += __ldcg(&V[idx]);
+        }
+    }
+    
+    if (tid == 0) output[0] = sum;
+}
+
+// 对比实验C: 随机索引访问
+__global__ __noinline__ void compare_random_index_access(float* __restrict__ data,
+                                                          int* __restrict__ indices,
+                                                          float* __restrict__ output,
+                                                          size_t num_accesses,
+                                                          int iterations) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    int total_threads = gridDim.x * blockDim.x;
+    
+    float sum = 0.0f;
+    
+    size_t accesses_per_thread = num_accesses / total_threads;
+    size_t start = tid * accesses_per_thread;
+    
+    for (int iter = 0; iter < iterations; iter++) {
+        for (size_t i = 0; i < accesses_per_thread; i++) {
+            int idx = indices[start + i];
+            sum += __ldcg(&data[idx]);
+        }
+    }
+    
+    if (tid == 0) output[0] = sum;
+}
+
+// ============================================================
 // 辅助函数
 // ============================================================
+
+void print_comparison_box(const char* test1, float time1, 
+                          const char* test2, float time2) {
+    float diff = (time2 - time1) / time1 * 100.0f;
+    printf("\n┌────────────────────────────────────────────────────────────┐\n");
+    printf("│ %-30s: %8.3f ms                │\n", test1, time1);
+    printf("│ %-30s: %8.3f ms                │\n", test2, time2);
+    printf("│ ───────────────────────────────────────────────────────── │\n");
+    if (diff > 0) {
+        printf("│ Stitch 导致的性能损失: %+.1f%% (%.3f ms 额外开销)        │\n", 
+               diff, time2 - time1);
+    } else {
+        printf("│ 性能差异: %.1f%% (优化后更快)                             │\n", -diff);
+    }
+    printf("└────────────────────────────────────────────────────────────┘\n");
+}
 
 // 清空 L2 缓存 (通过访问大量不相关数据)
 __global__ void flush_l2_cache(float* flush_buffer, size_t elements) {
@@ -1039,6 +1178,266 @@ int main() {
         }
         
         printf("%6zu MB       %.3f                %s\n", cap_mb, cap_time, inference);
+    }
+    
+    // ============================================================
+    // 对比实验A: 本地访问 vs 跨 Partition 访问
+    // ============================================================
+    printf("\n");
+    print_separator();
+    printf("【对比实验A】本地访问 vs 跨 Partition 访问\n");
+    print_separator();
+    printf("场景: 相同数据量 (32MB)，不同的访问模式\n");
+    printf("- 本地访问: 每线程访问连续内存块，高 L2 命中\n");
+    printf("- 跨 Partition: 大步长访问，频繁触发 Stitch\n\n");
+    
+    {
+        int test_blocks = 256;
+        size_t test_elements = 8 * 1024 * 1024;  // 32 MB
+        int test_iterations = 5;
+        
+        // 测试本地访问
+        for (int w = 0; w < WARMUP_ITERS; w++) {
+            compare_local_access<<<test_blocks, block_size>>>(d_data, d_output, test_elements, test_iterations);
+        }
+        CUDA_CHECK(cudaDeviceSynchronize());
+        
+        cudaEventRecord(start);
+        for (int i = 0; i < TEST_ITERS; i++) {
+            compare_local_access<<<test_blocks, block_size>>>(d_data, d_output, test_elements, test_iterations);
+        }
+        cudaEventRecord(stop);
+        cudaEventSynchronize(stop);
+        float local_time;
+        cudaEventElapsedTime(&local_time, start, stop);
+        local_time /= TEST_ITERS;
+        
+        // 测试跨 Partition 访问（stride = 4MB = 1M floats）
+        size_t stride = 1024 * 1024;
+        for (int w = 0; w < WARMUP_ITERS; w++) {
+            compare_cross_partition<<<test_blocks, block_size>>>(d_data, d_output, test_elements, test_iterations, stride);
+        }
+        CUDA_CHECK(cudaDeviceSynchronize());
+        
+        cudaEventRecord(start);
+        for (int i = 0; i < TEST_ITERS; i++) {
+            compare_cross_partition<<<test_blocks, block_size>>>(d_data, d_output, test_elements, test_iterations, stride);
+        }
+        cudaEventRecord(stop);
+        cudaEventSynchronize(stop);
+        float cross_time;
+        cudaEventElapsedTime(&cross_time, start, stop);
+        cross_time /= TEST_ITERS;
+        
+        print_comparison_box("本地访问 (连续)", local_time, 
+                            "跨 Partition (stride=4MB)", cross_time);
+    }
+    
+    // ============================================================
+    // 对比实验B: 单 Buffer 3x vs 多 Buffer QKV
+    // ============================================================
+    printf("\n");
+    print_separator();
+    printf("【对比实验B】单 Buffer 3x vs 多 Buffer QKV\n");
+    print_separator();
+    printf("场景: 模拟 Attention 中 Q, K, V 的访问模式\n");
+    printf("- 单 Buffer 3x: 同一内存区域访问3次（L2 命中率高）\n");
+    printf("- 多 Buffer QKV: 3个独立 buffer 各访问1次（3倍唯一地址）\n");
+    printf("关键: 虽然访问次数相同，但多 Buffer 产生更多唯一地址\n\n");
+    
+    {
+        // 分配 QKV buffers
+        float *d_Q, *d_K, *d_V;
+        size_t qkv_size = 16 * 1024 * 1024;  // 每个 16 MB
+        size_t qkv_elements = qkv_size / sizeof(float);
+        
+        CUDA_CHECK(cudaMalloc(&d_Q, qkv_size));
+        CUDA_CHECK(cudaMalloc(&d_K, qkv_size));
+        CUDA_CHECK(cudaMalloc(&d_V, qkv_size));
+        CUDA_CHECK(cudaMemset(d_Q, 1, qkv_size));
+        CUDA_CHECK(cudaMemset(d_K, 2, qkv_size));
+        CUDA_CHECK(cudaMemset(d_V, 3, qkv_size));
+        
+        int test_iterations = 20;
+        
+        // 测试单 Buffer 3x 访问
+        for (int w = 0; w < WARMUP_ITERS; w++) {
+            compare_single_buffer_3x<<<num_blocks, block_size>>>(d_Q, d_output, qkv_elements, test_iterations);
+        }
+        CUDA_CHECK(cudaDeviceSynchronize());
+        
+        cudaEventRecord(start);
+        for (int i = 0; i < TEST_ITERS; i++) {
+            compare_single_buffer_3x<<<num_blocks, block_size>>>(d_Q, d_output, qkv_elements, test_iterations);
+        }
+        cudaEventRecord(stop);
+        cudaEventSynchronize(stop);
+        float single_time;
+        cudaEventElapsedTime(&single_time, start, stop);
+        single_time /= TEST_ITERS;
+        
+        // 测试多 Buffer QKV 访问
+        for (int w = 0; w < WARMUP_ITERS; w++) {
+            compare_multi_buffer_qkv<<<num_blocks, block_size>>>(d_Q, d_K, d_V, d_output, qkv_elements, test_iterations);
+        }
+        CUDA_CHECK(cudaDeviceSynchronize());
+        
+        cudaEventRecord(start);
+        for (int i = 0; i < TEST_ITERS; i++) {
+            compare_multi_buffer_qkv<<<num_blocks, block_size>>>(d_Q, d_K, d_V, d_output, qkv_elements, test_iterations);
+        }
+        cudaEventRecord(stop);
+        cudaEventSynchronize(stop);
+        float multi_time;
+        cudaEventElapsedTime(&multi_time, start, stop);
+        multi_time /= TEST_ITERS;
+        
+        print_comparison_box("单 Buffer (同地址3x)", single_time,
+                            "多 Buffer (Q,K,V)", multi_time);
+        
+        printf("\n解释: 多 Buffer 产生 3 倍唯一地址，导致更多 L2 Fabric Miss\n");
+        
+        CUDA_CHECK(cudaFree(d_Q));
+        CUDA_CHECK(cudaFree(d_K));
+        CUDA_CHECK(cudaFree(d_V));
+    }
+    
+    // ============================================================
+    // 对比实验C: 索引排序优化效果
+    // ============================================================
+    printf("\n");
+    print_separator();
+    printf("【对比实验C】数据局部性优化 (索引排序)\n");
+    print_separator();
+    printf("场景: 稀疏访问，对比随机索引 vs 排序索引\n");
+    printf("优化原理: 排序后相邻访问更可能在同一 L2 partition\n\n");
+    
+    {
+        size_t num_accesses = num_blocks * block_size * 64;
+        int test_iterations = 5;
+        
+        // 准备随机索引和排序索引
+        std::vector<int> random_indices(num_accesses);
+        for (size_t i = 0; i < num_accesses; i++) {
+            random_indices[i] = rand() % buffer_elements;
+        }
+        
+        std::vector<int> sorted_indices = random_indices;
+        std::sort(sorted_indices.begin(), sorted_indices.end());
+        
+        int *d_random_idx, *d_sorted_idx;
+        CUDA_CHECK(cudaMalloc(&d_random_idx, num_accesses * sizeof(int)));
+        CUDA_CHECK(cudaMalloc(&d_sorted_idx, num_accesses * sizeof(int)));
+        CUDA_CHECK(cudaMemcpy(d_random_idx, random_indices.data(), 
+                             num_accesses * sizeof(int), cudaMemcpyHostToDevice));
+        CUDA_CHECK(cudaMemcpy(d_sorted_idx, sorted_indices.data(),
+                             num_accesses * sizeof(int), cudaMemcpyHostToDevice));
+        
+        // 测试随机索引
+        for (int w = 0; w < WARMUP_ITERS; w++) {
+            compare_random_index_access<<<num_blocks, block_size>>>(d_data, d_random_idx, d_output, num_accesses, test_iterations);
+        }
+        CUDA_CHECK(cudaDeviceSynchronize());
+        
+        cudaEventRecord(start);
+        for (int i = 0; i < TEST_ITERS; i++) {
+            compare_random_index_access<<<num_blocks, block_size>>>(d_data, d_random_idx, d_output, num_accesses, test_iterations);
+        }
+        cudaEventRecord(stop);
+        cudaEventSynchronize(stop);
+        float random_time;
+        cudaEventElapsedTime(&random_time, start, stop);
+        random_time /= TEST_ITERS;
+        
+        // 测试排序索引
+        for (int w = 0; w < WARMUP_ITERS; w++) {
+            compare_random_index_access<<<num_blocks, block_size>>>(d_data, d_sorted_idx, d_output, num_accesses, test_iterations);
+        }
+        CUDA_CHECK(cudaDeviceSynchronize());
+        
+        cudaEventRecord(start);
+        for (int i = 0; i < TEST_ITERS; i++) {
+            compare_random_index_access<<<num_blocks, block_size>>>(d_data, d_sorted_idx, d_output, num_accesses, test_iterations);
+        }
+        cudaEventRecord(stop);
+        cudaEventSynchronize(stop);
+        float sorted_time;
+        cudaEventElapsedTime(&sorted_time, start, stop);
+        sorted_time /= TEST_ITERS;
+        
+        print_comparison_box("随机索引 (未优化)", random_time,
+                            "排序索引 (优化后)", sorted_time);
+        
+        float speedup = random_time / sorted_time;
+        printf("\n优化效果: %.2fx 加速\n", speedup);
+        printf("原理: 排序后访问模式更连续，减少跨 Partition 访问\n");
+        
+        CUDA_CHECK(cudaFree(d_random_idx));
+        CUDA_CHECK(cudaFree(d_sorted_idx));
+    }
+    
+    // ============================================================
+    // 对比实验D: 高并发下的 Stitch 瓶颈
+    // ============================================================
+    printf("\n");
+    print_separator();
+    printf("【对比实验D】高并发下的 Stitch 瓶颈\n");
+    print_separator();
+    printf("场景: 固定总访问量，增加并发 block 数\n");
+    printf("预期: 高并发时 Stitch 带宽成为瓶颈，性能下降更明显\n\n");
+    
+    {
+        printf("Block数   同区域(ms)   跨区域(ms)    Stitch开销    瓶颈程度\n");
+        printf("------------------------------------------------------------------------\n");
+        
+        std::vector<int> test_block_counts = {16, 64, 128, 256, 512};
+        
+        for (int nblocks : test_block_counts) {
+            // 同区域访问
+            concurrent_same_region<<<nblocks, block_size>>>(d_data, region_size, d_output, d_timing);
+            CUDA_CHECK(cudaDeviceSynchronize());
+            
+            cudaEventRecord(start);
+            for (int i = 0; i < TEST_ITERS; i++) {
+                concurrent_same_region<<<nblocks, block_size>>>(d_data, region_size, d_output, d_timing);
+            }
+            cudaEventRecord(stop);
+            cudaEventSynchronize(stop);
+            float same_time;
+            cudaEventElapsedTime(&same_time, start, stop);
+            same_time /= TEST_ITERS;
+            
+            // 跨区域访问
+            concurrent_diff_region<<<nblocks, block_size>>>(d_data, region_size, region_offset, d_output, d_timing);
+            CUDA_CHECK(cudaDeviceSynchronize());
+            
+            cudaEventRecord(start);
+            for (int i = 0; i < TEST_ITERS; i++) {
+                concurrent_diff_region<<<nblocks, block_size>>>(d_data, region_size, region_offset, d_output, d_timing);
+            }
+            cudaEventRecord(stop);
+            cudaEventSynchronize(stop);
+            float diff_time;
+            cudaEventElapsedTime(&diff_time, start, stop);
+            diff_time /= TEST_ITERS;
+            
+            float overhead = (diff_time - same_time) / same_time * 100;
+            const char* bottleneck = "";
+            if (overhead > 40) {
+                bottleneck = "★★★ 严重瓶颈";
+            } else if (overhead > 20) {
+                bottleneck = "★★ 明显瓶颈";
+            } else if (overhead > 10) {
+                bottleneck = "★ 轻微瓶颈";
+            } else {
+                bottleneck = "无瓶颈";
+            }
+            
+            printf("%5d     %.3f        %.3f         %+5.1f%%        %s\n",
+                   nblocks, same_time, diff_time, overhead, bottleneck);
+        }
+        
+        printf("\n结论: 高并发 + 跨区域访问 = Stitch 带宽瓶颈\n");
     }
     
     // ============================================================
