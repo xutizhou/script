@@ -89,14 +89,14 @@ __global__ __noinline__ void single_region(float* data, size_t region_size,
 
 // 两区域交替访问 - 每次切换
 __global__ __noinline__ void two_regions_alt_1(float* data, size_t region_size,
-                                                size_t region_offset, float* output) {
+                                               size_t region_offset, float* output) {
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
     float sum = 0.0f;
     
-    // 每次访问切换区域
+    // 每次访问切换区域 (修复: 保持与 single_region 相同的访问地址数量)
     for (int i = 0; i < ITERATIONS; i++) {
         size_t base = (i % 2 == 0) ? 0 : region_offset;
-        size_t idx = base + (tid * 32 + i / 2) % region_size;
+        size_t idx = base + (tid * 32 + i) % region_size;  // 修复: 移除 i/2
         sum += __ldcg(&data[idx]);
     }
     
@@ -199,9 +199,10 @@ __global__ __noinline__ void offset_test(float* data, size_t region_size,
     int tid = blockIdx.x * blockDim.x + threadIdx.x;
     float sum = 0.0f;
     
+    // 修复: 保持与 single_region 相同的访问地址数量
     for (int i = 0; i < ITERATIONS; i++) {
         size_t base = (i % 2 == 0) ? 0 : offset;
-        size_t idx = base + (tid * 32 + i / 2) % region_size;
+        size_t idx = base + (tid * 32 + i) % region_size;  // 修复: 移除 i/2
         sum += __ldcg(&data[idx]);
     }
     
@@ -261,6 +262,20 @@ __global__ __noinline__ void random_access(float* data, size_t elements,
 // 辅助函数
 // ============================================================
 
+// 清空 L2 缓存 (通过访问大量不相关数据)
+__global__ void flush_l2_cache(float* flush_buffer, size_t elements) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    int total_threads = gridDim.x * blockDim.x;
+    float sum = 0.0f;
+    
+    for (size_t i = tid; i < elements; i += total_threads) {
+        sum += flush_buffer[i];
+    }
+    
+    // 防止优化
+    if (sum == -999999.0f) flush_buffer[0] = sum;
+}
+
 void print_separator() {
     printf("================================================================\n");
 }
@@ -308,6 +323,12 @@ int main() {
     CUDA_CHECK(cudaMalloc(&d_timing, max_blocks * sizeof(uint64_t)));
     CUDA_CHECK(cudaMemset(d_data, 1, buffer_size));
     
+    // 分配 L2 缓存清空用的缓冲区 (2x L2 大小)
+    float* d_flush_buffer;
+    size_t flush_size = 2 * l2_size;
+    CUDA_CHECK(cudaMalloc(&d_flush_buffer, flush_size));
+    CUDA_CHECK(cudaMemset(d_flush_buffer, 2, flush_size));
+    
     h_timing = (uint64_t*)malloc(max_blocks * sizeof(uint64_t));
     
     cudaEvent_t start, stop;
@@ -337,13 +358,16 @@ int main() {
         
         if (footprint > buffer_elements) continue;
         
-        // Warmup
-        footprint_test<<<num_blocks, block_size>>>(d_data, footprint, d_output);
+        // 清空 L2 缓存 (修复: 避免预热影响)
+        flush_l2_cache<<<256, 256>>>(d_flush_buffer, flush_size / sizeof(float));
         CUDA_CHECK(cudaDeviceSynchronize());
         
+        // 不做预热，直接测试冷启动性能
         cudaEventRecord(start);
         for (int i = 0; i < TEST_ITERS; i++) {
             footprint_test<<<num_blocks, block_size>>>(d_data, footprint, d_output);
+            // 每次迭代后清空缓存以测量真实的数据足迹影响
+            flush_l2_cache<<<256, 256>>>(d_flush_buffer, flush_size / sizeof(float));
         }
         cudaEventRecord(stop);
         cudaEventSynchronize(stop);
@@ -546,16 +570,20 @@ int main() {
     print_separator();
     printf("理论: 非 Coalesced 访问更容易触发跨 Partition 访问\n\n");
     
+    // 修复: 统一数据足迹为 L2 大小，避免 DRAM 访问干扰
+    size_t test_footprint = l2_size / sizeof(float);  // 60 MB = L2
+    
     printf("访问模式          时间(ms)      相对 Coalesced    预期 Stitch\n");
     printf("------------------------------------------------------------------------\n");
+    printf("(数据足迹统一为 %.0f MB = L2 大小)\n\n", l2_size / 1024.0 / 1024.0);
     
     // Coalesced
-    coalesced_access<<<num_blocks, block_size>>>(d_data, buffer_elements, d_output);
+    coalesced_access<<<num_blocks, block_size>>>(d_data, test_footprint, d_output);
     CUDA_CHECK(cudaDeviceSynchronize());
     
     cudaEventRecord(start);
     for (int i = 0; i < TEST_ITERS; i++) {
-        coalesced_access<<<num_blocks, block_size>>>(d_data, buffer_elements, d_output);
+        coalesced_access<<<num_blocks, block_size>>>(d_data, test_footprint, d_output);
     }
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
@@ -566,12 +594,12 @@ int main() {
     
     // Strided - 小步长
     size_t stride_small = 1024;  // 4 KB
-    strided_access<<<num_blocks, block_size>>>(d_data, buffer_elements, stride_small, d_output);
+    strided_access<<<num_blocks, block_size>>>(d_data, test_footprint, stride_small, d_output);
     CUDA_CHECK(cudaDeviceSynchronize());
     
     cudaEventRecord(start);
     for (int i = 0; i < TEST_ITERS; i++) {
-        strided_access<<<num_blocks, block_size>>>(d_data, buffer_elements, stride_small, d_output);
+        strided_access<<<num_blocks, block_size>>>(d_data, test_footprint, stride_small, d_output);
     }
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
@@ -582,12 +610,12 @@ int main() {
     
     // Strided - 大步长 (L2/8)
     size_t stride_large = l2_size / 8 / sizeof(float);
-    strided_access<<<num_blocks, block_size>>>(d_data, buffer_elements, stride_large, d_output);
+    strided_access<<<num_blocks, block_size>>>(d_data, test_footprint, stride_large, d_output);
     CUDA_CHECK(cudaDeviceSynchronize());
     
     cudaEventRecord(start);
     for (int i = 0; i < TEST_ITERS; i++) {
-        strided_access<<<num_blocks, block_size>>>(d_data, buffer_elements, stride_large, d_output);
+        strided_access<<<num_blocks, block_size>>>(d_data, test_footprint, stride_large, d_output);
     }
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
@@ -597,12 +625,12 @@ int main() {
     printf("strided (L2/8)    %.3f         %.2fx             高\n", stride_large_time, stride_large_time / coal_time);
     
     // Random
-    random_access<<<num_blocks, block_size>>>(d_data, buffer_elements, 12345, d_output);
+    random_access<<<num_blocks, block_size>>>(d_data, test_footprint, 12345, d_output);
     CUDA_CHECK(cudaDeviceSynchronize());
     
     cudaEventRecord(start);
     for (int i = 0; i < TEST_ITERS; i++) {
-        random_access<<<num_blocks, block_size>>>(d_data, buffer_elements, 12345, d_output);
+        random_access<<<num_blocks, block_size>>>(d_data, test_footprint, 12345, d_output);
     }
     cudaEventRecord(stop);
     cudaEventSynchronize(stop);
@@ -645,6 +673,7 @@ int main() {
     CUDA_CHECK(cudaFree(d_data));
     CUDA_CHECK(cudaFree(d_output));
     CUDA_CHECK(cudaFree(d_timing));
+    CUDA_CHECK(cudaFree(d_flush_buffer));
     
     return 0;
 }
