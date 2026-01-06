@@ -1,0 +1,693 @@
+==PROF== Connected to process 460135 (/lustre/raplab/client/xutingz/workspace/gitsrc/script/gpu_arch_exp/stitch_traffic_complete_analysis)
+==PROF== Profiling "flush_l2_cache" - 0: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 1: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 2: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 3: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 4: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 5: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 6: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 7: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 8: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 9: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 10: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 11: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 12: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 13: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 14: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 15: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 16: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 17: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 18: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 19: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 20: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 21: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 22: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 23: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 24: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 25: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 26: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 27: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 28: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 29: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 30: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 31: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 32: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 33: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 34: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 35: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 36: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 37: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 38: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 39: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 40: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 41: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 42: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 43: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 44: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 45: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 46: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 47: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 48: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 49: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 50: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 51: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 52: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 53: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 54: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 55: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 56: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 57: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 58: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 59: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 60: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 61: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 62: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 63: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 64: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 65: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 66: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 67: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 68: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 69: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 70: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 71: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 72: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 73: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 74: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 75: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 76: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 77: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 78: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 79: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 80: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 81: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 82: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 83: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 84: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 85: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 86: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 87: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 88: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 89: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 90: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 91: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 92: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 93: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 94: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 95: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 96: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 97: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 98: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 99: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 100: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 101: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 102: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 103: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 104: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 105: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 106: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 107: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 108: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 109: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 110: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 111: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 112: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 113: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 114: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 115: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 116: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 117: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 118: 0%....50%....100% - 3 passes
+==PROF== Profiling "footprint_test" - 119: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 120: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_region" - 121: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_region" - 122: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_region" - 123: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_region" - 124: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_region" - 125: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_region" - 126: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_1" - 127: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_1" - 128: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_1" - 129: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_1" - 130: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_1" - 131: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_1" - 132: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_10" - 133: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_10" - 134: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_10" - 135: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_10" - 136: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_10" - 137: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_10" - 138: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_100" - 139: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_100" - 140: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_100" - 141: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_100" - 142: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_100" - 143: 0%....50%....100% - 3 passes
+==PROF== Profiling "two_regions_alt_100" - 144: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 145: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 146: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 147: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 148: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 149: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 150: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 151: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 152: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 153: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 154: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 155: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 156: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 157: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 158: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 159: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 160: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 161: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 162: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 163: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 164: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 165: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 166: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 167: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 168: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 169: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 170: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 171: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 172: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 173: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 174: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 175: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 176: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 177: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 178: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 179: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 180: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 181: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 182: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 183: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 184: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 185: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 186: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 187: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 188: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 189: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 190: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 191: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 192: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 193: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 194: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 195: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 196: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 197: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 198: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 199: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 200: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 201: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 202: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 203: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 204: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 205: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 206: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 207: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 208: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 209: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 210: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 211: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 212: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 213: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 214: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 215: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 216: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 217: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 218: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 219: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 220: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 221: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 222: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 223: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 224: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 225: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 226: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 227: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 228: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 229: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 230: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 231: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 232: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 233: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 234: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 235: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 236: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 237: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 238: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 239: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 240: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 241: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 242: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 243: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 244: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 245: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 246: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 247: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 248: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 249: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 250: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 251: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 252: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 253: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 254: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 255: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 256: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 257: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 258: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 259: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 260: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 261: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 262: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 263: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 264: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 265: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 266: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 267: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 268: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 269: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 270: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 271: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 272: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 273: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 274: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 275: 0%....50%....100% - 3 passes
+==PROF== Profiling "offset_test" - 276: 0%....50%....100% - 3 passes
+
+================================================================
+================================================================
+       Stitch Traffic 完整分析实验
+================================================================
+================================================================
+GPU: NVIDIA H20-3e
+L2 Cache: 60.0 MB
+L2/2 (Stitch 阈值): 30.0 MB
+SM Count: 78
+================================================================
+
+================================================================
+实验1: 数据足迹对 Stitch 的影响
+================================================================
+理论: 数据足迹 > L2/2 (30 MB) 时开始产生 Stitch Traffic
+
+数据足迹(MB)   时间(ms)      相对10MB     推断
+------------------------------------------------------------------------
+      10       256.791         1.00x        < L2/2, 无 Stitch
+      15       251.970         0.98x        < L2/2, 无 Stitch
+      20       249.172         0.97x        < L2/2, 无 Stitch
+      25       250.064         0.97x        < L2/2, 无 Stitch
+      30       260.172         1.01x        < L2/2, 无 Stitch
+      35       255.004         0.99x        > L2/2, 可能有 Stitch
+      40       252.050         0.98x        > L2/2, 可能有 Stitch
+      50       252.829         0.98x        > L2/2, 可能有 Stitch
+      60       252.185         0.98x        > L2/2, 可能有 Stitch
+      80       249.098         0.97x        > L2, DRAM + Stitch
+     100       281.677         1.10x        > L2, DRAM + Stitch
+
+================================================================
+实验2: 访问模式对 Stitch 的影响
+================================================================
+理论: 频繁切换区域会增加 Stitch Traffic
+
+访问模式              时间(ms)      相对单区域    预期 Stitch
+------------------------------------------------------------------------
+single_region         138.087         1.00x         无
+two_regions (每1次)   155.944         1.13x         高
+two_regions (每10次)  127.988         0.93x         中
+two_regions (每100次) 125.888         0.91x         低
+
+================================================================
+实验3: 并发度对 Stitch 的影响
+================================================================
+理论: 高并发时 Stitch 带宽可能成为瓶颈
+
+Block数   同区域(ms)   不同区域(ms)   差异      推断
+------------------------------------------------------------------------
+    1     127.174        125.992          -0.9%     无明显影响
+    4     125.455        124.517          -0.7%     无明显影响
+   16     124.473        124.719          +0.2%     无明显影响
+   64     125.924        139.912          +11.1%     Stitch 带宽竞争
+  128     128.946        138.223          +7.2%     轻微 Stitch 开销
+  256     128.748        127.227          -1.2%     无明显影响
+
+================================================================
+实验4: 地址偏移对 Stitch 的影响
+================================================================
+理论: 偏移量 ≈ L2/2 或 L2 时 Stitch 更明显
+
+偏移(MB)   时间(ms)      相对 4MB     推断
+------------------------------------------------------------------------
+     4     125.020         1.00x        
+     8     124.293         0.99x        
+    16     126.629         1.01x        
+    24     124.734         1.00x        
+    30     124.251         0.99x        = L2/2 阈值
+    32     124.955         1.00x        
+    40     124.965         1.00x        
+    48     124.385         0.99x        
+    56     125.283         1.00x        
+    60     128.245         1.03x        = L2 大小
+
+================================================================
+实验5: 访问粒度对 Stitch 的影响
+================================================================
+理论: 非 Coalesced 访问更容易触发跨 Partition 访问
+
+访问模式          时间(ms)      相对 Coalesced    预期 Stitch
+------------------------------------------------------------------------
+(数�==PROF== Profiling "coalesced_access" - 277: 0%....50%....100% - 3 passes
+==PROF== Profiling "coalesced_access" - 278: 0%....50%....100% - 3 passes
+==PROF== Profiling "coalesced_access" - 279: 0%....50%....100% - 3 passes
+==PROF== Profiling "coalesced_access" - 280: 0%....50%....100% - 3 passes
+==PROF== Profiling "coalesced_access" - 281: 0%....50%....100% - 3 passes
+==PROF== Profiling "coalesced_access" - 282: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 283: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 284: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 285: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 286: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 287: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 288: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 289: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 290: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 291: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 292: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 293: 0%....50%....100% - 3 passes
+==PROF== Profiling "strided_access" - 294: 0%....50%....100% - 3 passes
+==PROF== Profiling "random_access" - 295: 0%....50%....100% - 3 passes
+==PROF== Profiling "random_access" - 296: 0%....50%....100% - 3 passes
+==PROF== Profiling "random_access" - 297: 0%....50%....100% - 3 passes
+==PROF== Profiling "random_access" - 298: 0%....50%....100% - 3 passes
+==PROF== Profiling "random_access" - 299: 0%....50%....100% - 3 passes
+==PROF== Profiling "random_access" - 300: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_buffer_access" - 301: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_buffer_access" - 302: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_buffer_access" - 303: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_buffer_access" - 304: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_buffer_access" - 305: 0%....50%....100% - 3 passes
+==PROF== Profiling "single_buffer_access" - 306: 0%....50%....100% - 3 passes
+==PROF== Profiling "dual_buffer_access" - 307: 0%....50%....100% - 3 passes
+==PROF== Profiling "dual_buffer_access" - 308: 0%....50%....100% - 3 passes
+==PROF== Profiling "dual_buffer_access" - 309: 0%....50%....100% - 3 passes
+==PROF== Profiling "dual_buffer_access" - 310: 0%....50%....100% - 3 passes
+==PROF== Profiling "dual_buffer_access" - 311: 0%....50%....100% - 3 passes
+==PROF== Profiling "dual_buffer_access" - 312: 0%....50%....100% - 3 passes
+==PROF== Profiling "triple_buffer_access" - 313: 0%....50%....100% - 3 passes
+==PROF== Profiling "triple_buffer_access" - 314: 0%....50%....100% - 3 passes
+==PROF== Profiling "triple_buffer_access" - 315: 0%....50%....100% - 3 passes
+==PROF== Profiling "triple_buffer_access" - 316: 0%....50%....100% - 3 passes
+==PROF== Profiling "triple_buffer_access" - 317: 0%....50%....100% - 3 passes
+==PROF== Profiling "triple_buffer_access" - 318: 0%....50%....100% - 3 passes
+==PROF== Profiling "quad_buffer_access" - 319: 0%....50%....100% - 3 passes
+==PROF== Profiling "quad_buffer_access" - 320: 0%....50%....100% - 3 passes
+==PROF== Profiling "quad_buffer_access" - 321: 0%....50%....100% - 3 passes
+==PROF== Profiling "quad_buffer_access" - 322: 0%....50%....100% - 3 passes
+==PROF== Profiling "quad_buffer_access" - 323: 0%....50%....100% - 3 passes
+==PROF== Profiling "quad_buffer_access" - 324: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_local" - 325: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_local" - 326: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_local" - 327: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_local" - 328: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_local" - 329: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_local" - 330: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_cross_region" - 331: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_cross_region" - 332: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_cross_region" - 333: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_cross_region" - 334: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_cross_region" - 335: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_cross_region" - 336: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_stress_test" - 337: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_stress_test" - 338: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_stress_test" - 339: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_stress_test" - 340: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_stress_test" - 341: 0%....50%....100% - 3 passes
+==PROF== Profiling "bandwidth_stress_test" - 342: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 343: 0%....50%....100% - 3 passes
+==PROF== Profiling "effective_l2_test" - 344: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 345: 0%....50%....100% - 3 passes
+==PROF== Profiling "effective_l2_test" - 346: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 347: 0%....50%....100% - 3 passes
+==PROF== Profiling "effective_l2_test" - 348: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 349: 0%....50%....100% - 3 passes
+==PROF== Profiling "effective_l2_test" - 350: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 351: 0%....50%....100% - 3 passes
+==PROF== Profiling "effective_l2_test" - 352: 0%....50%....100% - 3 passes
+==PROF== Profiling "flush_l2_cache" - 353: 0%....50%....100% - 3 passes
+==PROF== Profiling "effective_l2_test" - 354: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_local_access" - 355: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_local_access" - 356: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_local_access" - 357: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_local_access" - 358: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_local_access" - 359: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_local_access" - 360: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_local_access" - 361: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_local_access" - 362: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_cross_partition" - 363: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_cross_partition" - 364: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_cross_partition" - 365: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_cross_partition" - 366: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_cross_partition" - 367: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_cross_partition" - 368: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_cross_partition" - 369: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_cross_partition" - 370: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_single_buffer_3x" - 371: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_single_buffer_3x" - 372: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_single_buffer_3x" - 373: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_single_buffer_3x" - 374: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_single_buffer_3x" - 375: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_single_buffer_3x" - 376: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_single_buffer_3x" - 377: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_single_buffer_3x" - 378: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_multi_buffer_qkv" - 379: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_multi_buffer_qkv" - 380: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_multi_buffer_qkv" - 381: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_multi_buffer_qkv" - 382: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_multi_buffer_qkv" - 383: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_multi_buffer_qkv" - 384: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_multi_buffer_qkv" - 385: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_multi_buffer_qkv" - 386: 0%....50%....100% - 3 passes
+�足迹统一为 60 MB = L2 大小)
+
+coalesced         137.540         1.00x             低
+strided (4KB)     128.098         0.93x             中
+strided (L2/8)    129.071         0.94x             高
+random            154.194         1.12x             最高
+
+================================================================
+实验6: 多 Buffer 场景 (模拟 Attention Q, K, V)
+================================================================
+理论: N 个独立 buffer = N 倍唯一地址 = N 倍 Fabric Miss
+       这解释了 Attention 等多矩阵运算为什么 Stitch 高
+
+Buffer 数量     时间(ms)      相对 1 Buffer    Stitch 预期
+------------------------------------------------------------------------
+(每个 Buffer = 16 MB)
+
+1 Buffer        127.103         1.00x            基准
+2 Buffers       130.474         1.03x            2x Fabric Miss
+3 Buffers (QKV) 126.623         1.00x            3x Fabric Miss
+4 Buffers       127.347         1.00x            4x Fabric Miss
+
+================================================================
+实验7: Stitch 带宽瓶颈测试
+================================================================
+理论: 高带宽压力下，Stitch 路径 (~100 cycles) 成为瓶颈
+       本地 L2 带宽 >> Stitch 带宽
+
+访问模式          时间(ms)      带宽(GB/s)      预期瓶颈
+------------------------------------------------------------------------
+本地顺序读      125.022         0.5           L2 带宽
+跨区域交替      124.689         134.6           Stitch 带宽
+大步长压力      155.600         --             Stitch 瓶颈
+
+跨区域 vs 本地开销: -0.3%
+
+================================================================
+实验8: 有效 L2 容量测试
+================================================================
+理论: 由于 Stitch，有效 L2 容量约为 L2/2
+       超过此阈值后，性能显著下降
+
+数据足迹       多次遍历时间(ms)     推断
+------------------------------------------------------------------------
+    10 MB       138.509                < L2/2, 高效缓存
+    20 MB       126.356                < L2/2, 高效缓存
+    30 MB       128.601                < L2/2, 高效缓存
+    40 MB       126.381                > L2/2, 跨 uGPU 访问
+    50 MB       140.688                > L2/2, 跨 uGPU 访问
+    60 MB       149.917                > L2/2, 跨 uGPU 访问
+
+================================================================
+【对比实验A】本地访问 vs 跨 Partition 访问
+================================================================
+场景: 相同数据量 (32MB)，不同的访问模式
+- 本地访问: 每线程访问连续内存块，高 L2 命中
+- 跨 Partition: 大步长访问，频繁触发 Stitch
+
+
+┌────────────────────────────────────────────────────────────┐
+│ 本地访问 (连续)         :  158.444 ms                │
+│ 跨 Partition (stride=4MB)    :  125.028 ms                │
+│ ───────────────────────────────────────────────────────── │
+│ 性能差异: 21.1% (优化后更快)                             │
+└────────────────────────────────────────────────────────────┘
+
+================================================================
+【对比实验B】单 Buffer 3x vs 多 Buffer QKV
+================================================================
+场景: 模拟 Attention 中 Q, K, V 的访问模式
+- 单 Buffer 3x: 同一内存区域访问3次（L2 命中率高）
+- 多 Buffer QKV: 3个独立 buffer 各访问1次（3倍唯一地址）
+关键: 虽然访问次数相同，但多 Buffer 产生更多唯一地址
+
+
+┌──────────────────────────────────────==PROF== Profiling "compare_random_index_access" - 387: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 388: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 389: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 390: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 391: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 392: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 393: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 394: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 395: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 396: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 397: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 398: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 399: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 400: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 401: 0%....50%....100% - 3 passes
+==PROF== Profiling "compare_random_index_access" - 402: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 403: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 404: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 405: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 406: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 407: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 408: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 409: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 410: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 411: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 412: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 413: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 414: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 415: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 416: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 417: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 418: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 419: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 420: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 421: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 422: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 423: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 424: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 425: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 426: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 427: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 428: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 429: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 430: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 431: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 432: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 433: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 434: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 435: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 436: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 437: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 438: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 439: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 440: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 441: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 442: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 443: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 444: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 445: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 446: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 447: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 448: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 449: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 450: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 451: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 452: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 453: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 454: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 455: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_same_region" - 456: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 457: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 458: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 459: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 460: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 461: 0%....50%....100% - 3 passes
+==PROF== Profiling "concurrent_diff_region" - 462: 0%....50%....100% - 3 passes
+──────────────────────┐
+│ 单 Buffer (同地址3x)      :  126.311 ms                │
+│ 多 Buffer (Q,K,V)            :  127.713 ms                │
+│ ───────────────────────────────────────────────────────── │
+│ Stitch 导致的性能损失: +1.1% (1.403 ms 额外开销)        │
+└────────────────────────────────────────────────────────────┘
+
+解释: 多 Buffer 产生 3 倍唯一地址，导致更多 L2 Fabric Miss
+
+================================================================
+【对比实验C】数据局部性优化 (索引排序)
+================================================================
+场景: 稀疏访问，对比随机索引 vs 排序索引
+优化原理: 排序后相邻访问更可能在同一 L2 partition
+
+
+┌────────────────────────────────────────────────────────────┐
+│ 随机索引 (未优化)      :  128.843 ms                │
+│ 排序索引 (优化后)      :  127.819 ms                │
+│ ───────────────────────────────────────────────────────── │
+│ 性能差异: 0.8% (优化后更快)                             │
+└────────────────────────────────────────────────────────────┘
+
+优化效果: 1.01x 加速
+原理: 排序后访问模式更连续，减少跨 Partition 访问
+
+================================================================
+【对比实验D】高并发下的 Stitch 瓶颈
+================================================================
+场景: 固定总访问量，增加并发 block 数
+预期: 高并发时 Stitch 带宽成为瓶颈，性能下降更明显
+
+Block数   同区域(ms)   跨区域(ms)    Stitch开销    瓶颈程度
+------------------------------------------------------------------------
+   16     124.651        125.329          +0.5%        无瓶颈
+   64     140.942        126.073         -10.5%        无瓶颈
+  128     136.192        130.756          -4.0%        无瓶颈
+  256     143.032        129.667          -9.3%        无瓶颈
+  512     125.476        128.624          +2.5%        无瓶颈
+
+结论: 高并发 + 跨区域访问 = Stitch 带宽瓶颈
+
+================================================================
+================================================================
+总结: Stitch Traffic 触发条件
+================================================================
+================================================================
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ 触发条件                           │ Stitch 程度 │ NCU 指标变化      │
+├─────────────────────────────────────────────────────────────────────┤
+│ 1. 数据足迹 > L2/2 (30 MB)       │ 中等        │ +50% fabric req  │
+│ 2. 频繁切换访问区域 (每次)         │ 高          │ +85% fabric req  │
+│ 3. 高并发 + 跨区域访问             │ 很高        │ +100% DRAM read  │
+│ 4. 大步长 Strided 访问             │ 中等        │ 取决于步长        │
+│ 5. 随机访问                        │ 最高        │ 最大 fabric req   │
+└─────────────────────────────────────────────────────────────────────┘
+
+================================================================
+NCU 分析命令 (在 Docker 内运行):
+================================================================
+
+ncu --metrics \
+  lts__t_requests_srcunit_ltcfabric.sum,\
+  lts__ltcfabric2lts_cycles_active.sum,\
+  lts__t_sectors.sum,\
+  dram__bytes_read.sum,\
+  lts__t_request_hit_rate \
+  ./stitch_traffic_complete_analysis
+================================================================
+==PROF== Disconnected from process 460135
+==PROF== Report: /lustre/raplab/client/xutingz/workspace/gitsrc/script/gpu_arch_exp/stitch_traffic_analysis.ncu-rep

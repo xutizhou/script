@@ -1,0 +1,451 @@
+[460135] stitch_traffic_complete_analysis@127.0.0.1
+  bandwidth_cross_region(float *, unsigned long, unsigned long, float *) (256, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Mbyte        33.84        33.87        33.86
+    lts__ltcfabric2lts_cycles_active.sum        cycle   672,304.00   673,455.00   672,870.83
+    lts__t_request_hit_rate.pct                     %        79.01        79.07        79.04
+    lts__t_requests_srcunit_ltcfabric.sum     request   143,596.00   143,944.00   143,788.00
+    lts__t_sectors.sum                         sector 7,903,619.00 7,907,188.00 7,905,897.67
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  bandwidth_local(float *, unsigned long, float *) (256, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Mbyte        62.92        62.93        62.93
+    lts__ltcfabric2lts_cycles_active.sum        cycle 1,310,451.00 1,310,619.00 1,310,550.17
+    lts__t_request_hit_rate.pct                     %         0.11         0.27         0.23
+    lts__t_requests_srcunit_ltcfabric.sum     request   340,943.00   341,089.00   341,044.17
+    lts__t_sectors.sum                         sector 2,966,652.00 2,969,712.00 2,969,089.00
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  bandwidth_stress_test(float *, unsigned long, float *) (512, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Kbyte        14.34        15.36        14.51
+    lts__ltcfabric2lts_cycles_active.sum        cycle     4,248.00     4,250.00     4,248.33
+    lts__t_request_hit_rate.pct                     %        99.89        99.94        99.92
+    lts__t_requests_srcunit_ltcfabric.sum     request     1,431.00     1,431.00     1,431.00
+    lts__t_sectors.sum                         sector 7,334,054.00 7,344,926.00 7,339,439.67
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  coalesced_access(float *, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Mbyte        65.54        65.56        65.55
+    lts__ltcfabric2lts_cycles_active.sum        cycle 1,384,723.00 1,385,243.00 1,385,012.83
+    lts__t_request_hit_rate.pct                     %         0.21         0.37         0.32
+    lts__t_requests_srcunit_ltcfabric.sum     request   361,211.00   361,500.00   361,308.00
+    lts__t_sectors.sum                         sector 3,090,878.00 3,094,393.00 3,093,653.33
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  compare_cross_partition(float *, float *, unsigned long, int, unsigned long) (256, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 8
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Mbyte         2.11         2.12         2.11
+    lts__ltcfabric2lts_cycles_active.sum        cycle    48,261.00    48,355.00    48,311.38
+    lts__t_request_hit_rate.pct                     %        96.92        97.42        97.34
+    lts__t_requests_srcunit_ltcfabric.sum     request    11,473.00    11,473.00    11,473.00
+    lts__t_sectors.sum                         sector 5,291,023.00 5,298,702.00 5,292,892.12
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  compare_local_access(float *, float *, unsigned long, int) (256, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 8
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte         33.93         33.96         33.94
+    lts__ltcfabric2lts_cycles_active.sum        cycle    799,072.00    801,841.00    800,841.25
+    lts__t_request_hit_rate.pct                     %         98.96         98.96         98.96
+    lts__t_requests_srcunit_ltcfabric.sum     request    273,203.00    274,072.00    273,652.50
+    lts__t_sectors.sum                         sector 40,679,697.00 40,740,826.00 40,706,047.12
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  compare_multi_buffer_qkv(float *, float *, float *, float *, unsigned long, int) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 8
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte         12.59         12.61         12.59
+    lts__ltcfabric2lts_cycles_active.sum        cycle    269,590.00    271,613.00    270,893.62
+    lts__t_request_hit_rate.pct                     %         99.74         99.74         99.74
+    lts__t_requests_srcunit_ltcfabric.sum     request    105,631.00    105,631.00    105,631.00
+    lts__t_sectors.sum                         sector 63,135,082.00 63,148,938.00 63,137,108.25
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  compare_random_index_access(float *, int *, float *, unsigned long, int) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 16
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte        455.12        598.37        526.68
+    lts__ltcfabric2lts_cycles_active.sum        cycle 11,033,478.00 17,338,361.00 14,183,903.06
+    lts__t_request_hit_rate.pct                     %         23.03         45.61         34.32
+    lts__t_requests_srcunit_ltcfabric.sum     request  5,757,342.00  9,633,800.00  7,695,106.44
+    lts__t_sectors.sum                         sector 18,405,010.00 23,121,968.00 20,763,348.62
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  compare_single_buffer_3x(float *, float *, unsigned long, int) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 8
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          4.22          4.22          4.22
+    lts__ltcfabric2lts_cycles_active.sum        cycle    101,993.00    103,422.00    102,388.62
+    lts__t_request_hit_rate.pct                     %         99.70         99.70         99.70
+    lts__t_requests_srcunit_ltcfabric.sum     request     38,769.00     38,769.00     38,769.00
+    lts__t_sectors.sum                         sector 21,060,072.00 21,060,515.00 21,060,259.38
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  concurrent_diff_region(float *, unsigned long, unsigned long, float *, unsigned long *) (1, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ---------- ---------- ----------
+    Metric Name                           Metric Unit    Minimum    Maximum    Average
+    ------------------------------------- ----------- ---------- ---------- ----------
+    dram__bytes_read.sum                        Kbyte      40.70      41.47      41.13
+    lts__ltcfabric2lts_cycles_active.sum        cycle   2,570.00   2,570.00   2,570.00
+    lts__t_request_hit_rate.pct                     %      95.93      98.05      96.84
+    lts__t_requests_srcunit_ltcfabric.sum     request     408.00     408.00     408.00
+    lts__t_sectors.sum                         sector 134,641.00 145,790.00 139,160.67
+    ------------------------------------- ----------- ---------- ---------- ----------
+
+  concurrent_diff_region(float *, unsigned long, unsigned long, float *, unsigned long *) (4, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ---------- ---------- ----------
+    Metric Name                           Metric Unit    Minimum    Maximum    Average
+    ------------------------------------- ----------- ---------- ---------- ----------
+    dram__bytes_read.sum                        Kbyte      75.26      76.54      75.82
+    lts__ltcfabric2lts_cycles_active.sum        cycle   4,573.00   4,580.00   4,577.67
+    lts__t_request_hit_rate.pct                     %      99.00      99.32      99.11
+    lts__t_requests_srcunit_ltcfabric.sum     request   1,143.00   1,143.00   1,143.00
+    lts__t_sectors.sum                         sector 519,968.00 522,359.00 521,552.83
+    ------------------------------------- ----------- ---------- ---------- ----------
+
+  concurrent_diff_region(float *, unsigned long, unsigned long, float *, unsigned long *) (16, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 12
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Kbyte        75.52        78.34        76.25
+    lts__ltcfabric2lts_cycles_active.sum        cycle     6,721.00     6,740.00     6,731.67
+    lts__t_request_hit_rate.pct                     %        99.15        99.72        99.56
+    lts__t_requests_srcunit_ltcfabric.sum     request     2,168.00     2,170.00     2,168.50
+    lts__t_sectors.sum                         sector 1,711,124.00 1,799,161.00 1,760,108.67
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  concurrent_diff_region(float *, unsigned long, unsigned long, float *, unsigned long *) (64, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 12
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Kbyte        75.26        77.06        75.78
+    lts__ltcfabric2lts_cycles_active.sum        cycle    12,408.00    12,428.00    12,420.08
+    lts__t_request_hit_rate.pct                     %        99.80        99.83        99.81
+    lts__t_requests_srcunit_ltcfabric.sum     request     5,230.00     5,233.00     5,231.42
+    lts__t_sectors.sum                         sector 6,071,761.00 6,337,441.00 6,183,142.50
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  concurrent_diff_region(float *, unsigned long, unsigned long, float *, unsigned long *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 12
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Kbyte         75.52         89.34         77.10
+    lts__ltcfabric2lts_cycles_active.sum        cycle     14,758.00     14,777.00     14,769.25
+    lts__t_request_hit_rate.pct                     %         99.71         99.90         99.87
+    lts__t_requests_srcunit_ltcfabric.sum     request      6,606.00      6,606.00      6,606.00
+    lts__t_sectors.sum                         sector 13,178,653.00 13,330,038.00 13,262,832.67
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  concurrent_diff_region(float *, unsigned long, unsigned long, float *, unsigned long *) (256, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 12
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Kbyte         75.52         79.87         76.59
+    lts__ltcfabric2lts_cycles_active.sum        cycle     14,237.00     14,247.00     14,242.92
+    lts__t_request_hit_rate.pct                     %         99.94         99.96         99.95
+    lts__t_requests_srcunit_ltcfabric.sum     request      6,373.00      6,373.00      6,373.00
+    lts__t_sectors.sum                         sector 29,127,486.00 29,398,534.00 29,309,551.83
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  concurrent_diff_region(float *, unsigned long, unsigned long, float *, unsigned long *) (512, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Kbyte         75.52         79.62         76.59
+    lts__ltcfabric2lts_cycles_active.sum        cycle     15,085.00     15,133.00     15,095.00
+    lts__t_request_hit_rate.pct                     %         99.97         99.97         99.97
+    lts__t_requests_srcunit_ltcfabric.sum     request      6,873.00      6,877.00      6,874.17
+    lts__t_sectors.sum                         sector 55,179,597.00 56,768,409.00 55,913,968.67
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  concurrent_same_region(float *, unsigned long, float *, unsigned long *) (1, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ---------- ---------- ----------
+    Metric Name                           Metric Unit    Minimum    Maximum    Average
+    ------------------------------------- ----------- ---------- ---------- ----------
+    dram__bytes_read.sum                        Kbyte      41.47      41.47      41.47
+    lts__ltcfabric2lts_cycles_active.sum        cycle   2,580.00   2,580.00   2,580.00
+    lts__t_request_hit_rate.pct                     %      96.83      98.05      97.03
+    lts__t_requests_srcunit_ltcfabric.sum     request     410.00     410.00     410.00
+    lts__t_sectors.sum                         sector 136,468.00 137,190.00 136,922.83
+    ------------------------------------- ----------- ---------- ---------- ----------
+
+  concurrent_same_region(float *, unsigned long, float *, unsigned long *) (4, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ---------- ---------- ----------
+    Metric Name                           Metric Unit    Minimum    Maximum    Average
+    ------------------------------------- ----------- ---------- ---------- ----------
+    dram__bytes_read.sum                        Kbyte     139.52     140.03     139.78
+    lts__ltcfabric2lts_cycles_active.sum        cycle   5,253.00   5,263.00   5,258.50
+    lts__t_request_hit_rate.pct                     %      98.88      99.20      98.94
+    lts__t_requests_srcunit_ltcfabric.sum     request   1,369.00   1,369.00   1,369.00
+    lts__t_sectors.sum                         sector 520,957.00 523,113.00 522,545.00
+    ------------------------------------- ----------- ---------- ---------- ----------
+
+  concurrent_same_region(float *, unsigned long, float *, unsigned long *) (16, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 12
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Kbyte       532.74       539.39       533.48
+    lts__ltcfabric2lts_cycles_active.sum        cycle    15,693.00    15,806.00    15,735.08
+    lts__t_request_hit_rate.pct                     %        99.43        99.51        99.44
+    lts__t_requests_srcunit_ltcfabric.sum     request     5,274.00     5,277.00     5,275.42
+    lts__t_sectors.sum                         sector 2,064,005.00 2,067,152.00 2,066,091.08
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  concurrent_same_region(float *, unsigned long, float *, unsigned long *) (64, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 12
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Mbyte         2.11         2.11         2.11
+    lts__ltcfabric2lts_cycles_active.sum        cycle    56,823.00    57,439.00    57,061.92
+    lts__t_request_hit_rate.pct                     %        99.56        99.56        99.56
+    lts__t_requests_srcunit_ltcfabric.sum     request    20,706.00    20,709.00    20,707.33
+    lts__t_sectors.sum                         sector 8,240,659.00 8,241,447.00 8,240,839.67
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  concurrent_same_region(float *, unsigned long, float *, unsigned long *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 12
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          4.20          4.21          4.20
+    lts__ltcfabric2lts_cycles_active.sum        cycle    103,854.00    104,766.00    104,513.08
+    lts__t_request_hit_rate.pct                     %         99.61         99.62         99.61
+    lts__t_requests_srcunit_ltcfabric.sum     request     39,184.00     39,193.00     39,189.08
+    lts__t_sectors.sum                         sector 16,465,470.00 16,469,273.00 16,468,738.92
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  concurrent_same_region(float *, unsigned long, float *, unsigned long *) (256, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 12
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          8.40          8.42          8.40
+    lts__ltcfabric2lts_cycles_active.sum        cycle    190,735.00    191,548.00    191,092.83
+    lts__t_request_hit_rate.pct                     %         99.63         99.65         99.65
+    lts__t_requests_srcunit_ltcfabric.sum     request     73,094.00     73,104.00     73,099.25
+    lts__t_sectors.sum                         sector 32,921,306.00 32,931,311.00 32,922,395.00
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  concurrent_same_region(float *, unsigned long, float *, unsigned long *) (512, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte         16.78         16.78         16.78
+    lts__ltcfabric2lts_cycles_active.sum        cycle    363,762.00    366,984.00    365,030.33
+    lts__t_request_hit_rate.pct                     %         99.67         99.67         99.67
+    lts__t_requests_srcunit_ltcfabric.sum     request    139,603.00    139,617.00    139,611.00
+    lts__t_sectors.sum                         sector 65,816,414.00 65,818,234.00 65,817,080.83
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  dual_buffer_access(float *, float *, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          8.40          8.41          8.40
+    lts__ltcfabric2lts_cycles_active.sum        cycle    189,872.00    192,444.00    191,370.17
+    lts__t_request_hit_rate.pct                     %         99.65         99.65         99.65
+    lts__t_requests_srcunit_ltcfabric.sum     request     73,117.00     73,117.00     73,117.00
+    lts__t_sectors.sum                         sector 32,918,926.00 32,920,917.00 32,919,779.00
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  effective_l2_test(float *, unsigned long, int, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------- -------------
+    Metric Name                           Metric Unit      Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------ ------------- -------------
+    dram__bytes_read.sum                        Mbyte        10.49        629.12        208.24
+    lts__ltcfabric2lts_cycles_active.sum        cycle   216,832.00 14,429,370.00  4,850,426.17
+    lts__t_request_hit_rate.pct                     %         0.08         85.12         54.66
+    lts__t_requests_srcunit_ltcfabric.sum     request    47,535.00  4,764,442.00  1,556,612.67
+    lts__t_sectors.sum                         sector 3,459,989.00 29,517,035.00 14,833,638.00
+    ------------------------------------- ----------- ------------ ------------- -------------
+
+  flush_l2_cache(float *, unsigned long) (256, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 72
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------ ------------
+    Metric Name                           Metric Unit      Minimum      Maximum      Average
+    ------------------------------------- ----------- ------------ ------------ ------------
+    dram__bytes_read.sum                        Mbyte       125.83       125.88       125.85
+    lts__ltcfabric2lts_cycles_active.sum        cycle 2,749,133.00 2,750,282.00 2,749,691.51
+    lts__t_request_hit_rate.pct                     %         0.05         1.62         0.15
+    lts__t_requests_srcunit_ltcfabric.sum     request   832,736.00   833,739.00   833,082.38
+    lts__t_sectors.sum                         sector 5,915,183.00 5,948,517.00 5,919,155.04
+    ------------------------------------- ----------- ------------ ------------ ------------
+
+  footprint_test(float *, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 55
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          4.20          4.23          4.20
+    lts__ltcfabric2lts_cycles_active.sum        cycle    103,049.00    104,862.00    104,057.20
+    lts__t_request_hit_rate.pct                     %         99.57         99.62         99.61
+    lts__t_requests_srcunit_ltcfabric.sum     request     39,061.00     39,061.00     39,061.00
+    lts__t_sectors.sum                         sector 16,465,604.00 16,483,883.00 16,468,765.24
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  offset_test(float *, unsigned long, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 60
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          8.40          8.41          8.40
+    lts__ltcfabric2lts_cycles_active.sum        cycle    190,894.00    197,204.00    194,213.70
+    lts__t_request_hit_rate.pct                     %         99.26         99.31         99.30
+    lts__t_requests_srcunit_ltcfabric.sum     request     72,935.00     73,285.00     73,123.07
+    lts__t_sectors.sum                         sector 16,533,163.00 16,552,061.00 16,537,425.10
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  quad_buffer_access(float *, float *, float *, float *, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte         16.79         16.79         16.79
+    lts__ltcfabric2lts_cycles_active.sum        cycle    361,069.00    363,423.00    362,814.50
+    lts__t_request_hit_rate.pct                     %         99.67         99.67         99.67
+    lts__t_requests_srcunit_ltcfabric.sum     request    139,455.00    139,455.00    139,455.00
+    lts__t_sectors.sum                         sector 65,820,280.00 65,823,260.00 65,821,123.83
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  random_access(float *, unsigned long, unsigned int, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Kbyte        268.03        270.08        268.50
+    lts__ltcfabric2lts_cycles_active.sum        cycle     27,094.00     27,118.00     27,108.50
+    lts__t_request_hit_rate.pct                     %         99.87         99.88         99.87
+    lts__t_requests_srcunit_ltcfabric.sum     request     11,479.00     11,479.00     11,479.00
+    lts__t_sectors.sum                         sector 15,926,723.00 15,936,841.00 15,931,215.33
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  single_buffer_access(float *, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          4.20          4.20          4.20
+    lts__ltcfabric2lts_cycles_active.sum        cycle    104,120.00    104,793.00    104,326.83
+    lts__t_request_hit_rate.pct                     %         99.61         99.61         99.61
+    lts__t_requests_srcunit_ltcfabric.sum     request     38,997.00     38,997.00     38,997.00
+    lts__t_sectors.sum                         sector 16,468,853.00 16,469,233.00 16,468,955.33
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  single_region(float *, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          4.20          4.21          4.20
+    lts__ltcfabric2lts_cycles_active.sum        cycle    104,056.00    104,847.00    104,504.17
+    lts__t_request_hit_rate.pct                     %         99.61         99.62         99.61
+    lts__t_requests_srcunit_ltcfabric.sum     request     39,061.00     39,061.00     39,061.00
+    lts__t_sectors.sum                         sector 16,465,094.00 16,469,664.00 16,468,233.67
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  strided_access(float *, unsigned long, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 12
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------ ------------- ------------
+    Metric Name                           Metric Unit      Minimum       Maximum      Average
+    ------------------------------------- ----------- ------------ ------------- ------------
+    dram__bytes_read.sum                        Kbyte         7.17        990.46       498.60
+    lts__ltcfabric2lts_cycles_active.sum        cycle     2,711.00     53,061.00    27,840.25
+    lts__t_request_hit_rate.pct                     %        99.53         99.71        99.62
+    lts__t_requests_srcunit_ltcfabric.sum     request       679.00     21,045.00    10,860.67
+    lts__t_sectors.sum                         sector 1,042,062.00 15,937,287.00 8,469,325.33
+    ------------------------------------- ----------- ------------ ------------- ------------
+
+  triple_buffer_access(float *, float *, float *, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte         12.60         12.60         12.60
+    lts__ltcfabric2lts_cycles_active.sum        cycle    272,908.00    275,592.00    274,004.17
+    lts__t_request_hit_rate.pct                     %         99.67         99.67         99.67
+    lts__t_requests_srcunit_ltcfabric.sum     request    106,365.00    106,365.00    106,365.00
+    lts__t_sectors.sum                         sector 49,369,499.00 49,371,868.00 49,370,512.83
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  two_regions_alt_1(float *, unsigned long, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          8.40          8.40          8.40
+    lts__ltcfabric2lts_cycles_active.sum        cycle    194,958.00    196,975.00    196,228.00
+    lts__t_request_hit_rate.pct                     %         99.30         99.30         99.30
+    lts__t_requests_srcunit_ltcfabric.sum     request     73,253.00     73,253.00     73,253.00
+    lts__t_sectors.sum                         sector 16,536,671.00 16,536,971.00 16,536,814.00
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  two_regions_alt_10(float *, unsigned long, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          8.40          8.40          8.40
+    lts__ltcfabric2lts_cycles_active.sum        cycle    198,562.00    199,642.00    199,186.00
+    lts__t_request_hit_rate.pct                     %         99.30         99.30         99.30
+    lts__t_requests_srcunit_ltcfabric.sum     request     73,248.00     73,248.00     73,248.00
+    lts__t_sectors.sum                         sector 16,536,968.00 16,537,146.00 16,537,035.33
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  two_regions_alt_100(float *, unsigned long, unsigned long, float *) (128, 1, 1)x(256, 1, 1), Device 0, CC 9.0, Invocations 6
+    Section: Command line profiler metrics
+    ------------------------------------- ----------- ------------- ------------- -------------
+    Metric Name                           Metric Unit       Minimum       Maximum       Average
+    ------------------------------------- ----------- ------------- ------------- -------------
+    dram__bytes_read.sum                        Mbyte          8.40          8.40          8.40
+    lts__ltcfabric2lts_cycles_active.sum        cycle    201,206.00    202,808.00    201,708.50
+    lts__t_request_hit_rate.pct                     %         99.30         99.30         99.30
+    lts__t_requests_srcunit_ltcfabric.sum     request     73,160.00     73,160.00     73,160.00
+    lts__t_sectors.sum                         sector 16,536,874.00 16,537,393.00 16,537,023.17
+    ------------------------------------- ----------- ------------- ------------- -------------
+
+  Note: The shown averages are calculated as the arithmetic mean of the metric values after the evaluation of the    
+  metrics for each individual kernel launch.                                                                         
+  If aggregating across varying launch configurations (like shared memory, cache config settings), the arithmetic    
+  mean can be misleading and looking at the individual results is recommended instead.                               
+  This output mode is backwards compatible to the per-kernel summary output of nvprof                                
+
