@@ -566,19 +566,17 @@ int main() {
     for (size_t buf_mb : buf_tests_mb) {
         size_t buf_elements = buf_mb * 1024 * 1024 / sizeof(float);
         
-        // Warmup
-        effective_l2_test<<<num_blocks, block_size>>>(d_data, buf_elements, 1, d_output);
+        // 清空 L2 确保冷访问
+        flush_l2_cache<<<256, 256>>>(d_flush_buffer, flush_size / sizeof(float));
         CUDA_CHECK(cudaDeviceSynchronize());
         
+        // 单次冷访问测量 (iteration=1)
         cudaEventRecord(start);
-        for (int i = 0; i < TEST_ITERS; i++) {
-            effective_l2_test<<<num_blocks, block_size>>>(d_data, buf_elements, 1, d_output);
-        }
+        effective_l2_test<<<num_blocks, block_size>>>(d_data, buf_elements, 1, d_output);
         cudaEventRecord(stop);
         cudaEventSynchronize(stop);
         float buf_time;
         cudaEventElapsedTime(&buf_time, start, stop);
-        buf_time /= TEST_ITERS;
         
         if (buf_mb == 10) {
             base_buf_time = buf_time;
