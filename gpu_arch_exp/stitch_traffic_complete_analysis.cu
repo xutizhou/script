@@ -12,23 +12,19 @@
  * 
  * 实验设计:
  * ┌────────────────────────────────────────────────────────────────────┐
- * │ 实验1: 并发度对 Stitch 的影响                                      │
- * │   - 1/16/64/128/256 blocks                                        │
- * │   - 观察高并发时 Stitch 带宽竞争                                   │
- * │                                                                    │
- * │ 实验2: 访问粒度对 Stitch 的影响                                    │
+ * │ 实验1: 访问粒度对 Stitch 的影响                                    │
  * │   - Coalesced vs Strided vs Random                                │
  * │   - 不同 stride 大小的影响                                        │
  * │                                                                    │
+ * │ 实验2: Stride 对 L2 Slice 分布影响                                 │
+ * │   - 测试不同 stride (2^N vs 质数) 对 L2 slice 映射的影响          │
+ * │   - 多次遍历测量 L2 hit rate                                      │
+ * │                                                                    │
  * │ 实验3: 多 Buffer 场景                                              │
  * │   - 模拟 Attention (Q, K, V) 等多矩阵访问                         │
- * │   - 测量 N 个独立 buffer 的 Stitch 累加效应                       │
+ * │   - 复用 effective_l2_test，iteration=1，测试 10-60MB 冷访问     │
  * │                                                                    │
- * │ 实验4: Stitch 带宽瓶颈实验                                         │
- * │   - 高带宽压力下 Stitch 成为瓶颈                                  │
- * │   - 对比本地 vs 跨 uGPU 带宽                                      │
- * │                                                                    │
- * │ 实验5: 有效 L2 容量实验 (数据足迹影响)                             │
+ * │ 实验4: 有效 L2 容量实验 (数据足迹影响)                             │
  * │   - 展示 Stitch 如何减少有效 L2 容量                              │
  * │   - 测量不同数据足迹的 L2 命中率                                  │
  * └────────────────────────────────────────────────────────────────────┘
@@ -55,63 +51,7 @@
 #define TEST_ITERS 5
 
 // ============================================================
-// 实验1: 并发度测试 Kernels
-// ============================================================
-
-// 同区域高并发访问
-__global__ __noinline__ void concurrent_same_region(float* data, size_t region_size,
-                                                     float* output, uint64_t* timing) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    float sum = 0.0f;
-    
-    __shared__ uint64_t start_time, end_time;
-    if (threadIdx.x == 0) start_time = clock64();
-    __syncthreads();
-    
-    for (int i = 0; i < ITERATIONS; i++) {
-        size_t idx = (tid * 32 + i) % region_size;
-        sum += __ldcg(&data[idx]);
-    }
-    
-    __syncthreads();
-    if (threadIdx.x == 0) {
-        end_time = clock64();
-        timing[blockIdx.x] = end_time - start_time;
-    }
-    
-    if (tid == 0) *output = sum;
-}
-
-// 不同区域高并发访问 (block 交替访问不同区域)
-__global__ __noinline__ void concurrent_diff_region(float* data, size_t region_size,
-                                                     size_t region_offset,
-                                                     float* output, uint64_t* timing) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    float sum = 0.0f;
-    
-    // 偶数 block 访问区域 A, 奇数 block 访问区域 B
-    size_t base = (blockIdx.x % 2 == 0) ? 0 : region_offset;
-    
-    __shared__ uint64_t start_time, end_time;
-    if (threadIdx.x == 0) start_time = clock64();
-    __syncthreads();
-    
-    for (int i = 0; i < ITERATIONS; i++) {
-        size_t idx = base + (threadIdx.x * 32 + i) % region_size;
-        sum += __ldcg(&data[idx]);
-    }
-    
-    __syncthreads();
-    if (threadIdx.x == 0) {
-        end_time = clock64();
-        timing[blockIdx.x] = end_time - start_time;
-    }
-    
-    if (tid == 0) *output = sum;
-}
-
-// ============================================================
-// 实验2: 访问粒度测试 Kernels
+// 实验1: 访问粒度测试 Kernels
 // ============================================================
 // 三种模式访问相同的地址空间 [0, elements)，只是访问顺序不同
 // 每种模式都访问 total_threads * ITERATIONS 个地址
@@ -173,7 +113,36 @@ __global__ __noinline__ void random_access(float* data, size_t elements,
 }
 
 // ============================================================
-// 实验5: 有效 L2 容量测试 Kernels
+// 实验2: Stride 对 L2 Slice 分布影响测试 Kernels
+// ============================================================
+// 假设: 特定 stride (如 2^N) 可能导致地址集中在同一 L2 slice
+//       而顺序访问或质数 stride 能更好地分散到多个 slice
+
+// 通用 stride 访问测试 - 多次遍历测量 L2 hit rate
+__global__ __noinline__ void stride_slice_test(float* data, size_t elements,
+                                                size_t stride, int iterations,
+                                                float* output) {
+    int tid = blockIdx.x * blockDim.x + threadIdx.x;
+    int total_threads = gridDim.x * blockDim.x;
+    float sum = 0.0f;
+    
+    // 计算每个线程访问的元素数量
+    size_t elements_per_thread = elements / total_threads;
+    
+    // 多次遍历相同数据，测量 L2 hit rate
+    for (int iter = 0; iter < iterations; iter++) {
+        for (size_t i = 0; i < elements_per_thread; i++) {
+            // 使用 stride 计算地址
+            size_t idx = ((size_t)tid * stride + i * total_threads * stride) % elements;
+            sum += __ldcg(&data[idx]);
+        }
+    }
+    
+    if (tid == 0) *output = sum;
+}
+
+// ============================================================
+// 实验4: 有效 L2 容量测试 Kernels
 // ============================================================
 
 // 测试有效 L2 容量 - 通过 hit rate 变化来检测
@@ -194,108 +163,9 @@ __global__ __noinline__ void effective_l2_test(float* data, size_t footprint,
 }
 
 // ============================================================
-// 实验3: 多 Buffer 场景 Kernels (模拟 Attention Q, K, V)
+// 实验3: 多 Buffer 场景 (复用 effective_l2_test，iteration=1)
 // ============================================================
-// 无 iteration，测试冷访问（无 L2 hit）场景
-
-// 单 buffer 访问 (基准) - 每线程访问 1 个地址
-__global__ __noinline__ void single_buffer_access(float* A, size_t elements,
-                                                   float* output) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    size_t idx = tid % elements;
-    float sum = __ldcg(&A[idx]);
-    
-    if (tid == 0) *output = sum;
-}
-
-// 双 buffer 访问 (模拟 K, V) - 每线程访问 2 个地址
-__global__ __noinline__ void dual_buffer_access(float* A, float* B, size_t elements,
-                                                 float* output) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    size_t idx = tid % elements;
-    float sum = __ldcg(&A[idx]) + __ldcg(&B[idx]);
-    
-    if (tid == 0) *output = sum;
-}
-
-// 三 buffer 访问 (模拟 Q, K, V) - 每线程访问 3 个地址
-__global__ __noinline__ void triple_buffer_access(float* A, float* B, float* C, 
-                                                   size_t elements, float* output) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    size_t idx = tid % elements;
-    float sum = __ldcg(&A[idx]) + __ldcg(&B[idx]) + __ldcg(&C[idx]);
-    
-    if (tid == 0) *output = sum;
-}
-
-// 四 buffer 访问 - 每线程访问 4 个地址
-__global__ __noinline__ void quad_buffer_access(float* A, float* B, float* C, float* D,
-                                                 size_t elements, float* output) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    size_t idx = tid % elements;
-    float sum = __ldcg(&A[idx]) + __ldcg(&B[idx]) + __ldcg(&C[idx]) + __ldcg(&D[idx]);
-    
-    if (tid == 0) *output = sum;
-}
-
-// ============================================================
-// 实验4: Stitch 带宽瓶颈测试 Kernels
-// ============================================================
-// 使用更可靠的方法确保跨 L2 partition 访问
-
-// 高带宽顺序读取 - 本地区域 (coalesced，同 cache line)
-__global__ __noinline__ void bandwidth_local(float* data, size_t elements, 
-                                              float* output) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    int total_threads = gridDim.x * blockDim.x;
-    float sum = 0.0f;
-    
-    // 顺序读取，warp 内访问连续地址，最大化 cache line 利用
-    for (size_t i = tid; i < elements; i += total_threads) {
-        sum += __ldcg(&data[i]);
-    }
-    
-    if (tid == 0) *output = sum;
-}
-
-// 高带宽读取 - 大质数步长 (强制跨 partition)
-// 使用大质数步长确保地址在 L2 hash 空间中均匀分散
-__global__ __noinline__ void bandwidth_cross_region(float* data, size_t elements,
-                                                     size_t prime_stride, float* output) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    int total_threads = gridDim.x * blockDim.x;
-    float sum = 0.0f;
-    
-    // 每个线程使用大质数步长访问，最大化跨 partition 概率
-    // prime_stride 应选择与 L2 partition 数不互质的大质数 (如 8388617 ≈ 8MB)
-    for (int i = 0; i < ITERATIONS; i++) {
-        size_t global_idx = (size_t)tid + (size_t)i * total_threads;
-        size_t idx = (global_idx * prime_stride) % elements;
-        sum += __ldcg(&data[idx]);
-    }
-    
-    if (tid == 0) *output = sum;
-}
-
-// 极端带宽压力测试 - 随机访问模式
-// 使用 hash 函数将线性索引映射到随机地址，确保跨 partition
-__global__ __noinline__ void bandwidth_stress_test(float* data, size_t total_elements,
-                                                    float* output) {
-    int tid = blockIdx.x * blockDim.x + threadIdx.x;
-    int total_threads = gridDim.x * blockDim.x;
-    float sum = 0.0f;
-    
-    // 使用 hash 函数分散访问地址，最大化跨 partition
-    for (int i = 0; i < ITERATIONS; i++) {
-        size_t global_idx = (size_t)tid + (size_t)i * total_threads;
-        // Knuth multiplicative hash - 均匀分散到所有 partition
-        size_t hash = global_idx * 2654435761ULL;
-        size_t idx = hash % total_elements;
-        sum += __ldcg(&data[idx]);
-    }
-    
-    if (tid == 0) *output = sum;
-}
+// 测试冷访问（无 L2 hit）场景，使用不同大小的 buffer
 
 // ============================================================
 // 对比实验 Kernels (清晰展示 Stitch 影响)
@@ -516,74 +386,16 @@ int main() {
     // ============================================================
     printf("\n");
     print_separator();
-    printf("实验1: 并发度对 Stitch 的影响\n");
-    print_separator();
-    printf("理论: 高并发时 Stitch 带宽可能成为瓶颈\n\n");
-    
-    size_t region_size = 16 * 1024 * 1024 / sizeof(float);  // 16 MB
-    size_t region_offset = 32 * 1024 * 1024 / sizeof(float);  // 32 MB 偏移
-    
-    std::vector<int> block_counts = {1, 4, 16, 64, 128, 256};
-    
-    printf("Block数   同区域(ms)   不同区域(ms)   差异      推断\n");
-    printf("------------------------------------------------------------------------\n");
-    
-    for (int nblocks : block_counts) {
-        // 同区域
-        concurrent_same_region<<<nblocks, block_size>>>(d_data, region_size, d_output, d_timing);
-        CUDA_CHECK(cudaDeviceSynchronize());
-        
-        cudaEventRecord(start);
-        for (int i = 0; i < TEST_ITERS; i++) {
-            concurrent_same_region<<<nblocks, block_size>>>(d_data, region_size, d_output, d_timing);
-        }
-        cudaEventRecord(stop);
-        cudaEventSynchronize(stop);
-        float same_time;
-        cudaEventElapsedTime(&same_time, start, stop);
-        same_time /= TEST_ITERS;
-        
-        // 不同区域
-        concurrent_diff_region<<<nblocks, block_size>>>(d_data, region_size, region_offset, d_output, d_timing);
-        CUDA_CHECK(cudaDeviceSynchronize());
-        
-        cudaEventRecord(start);
-        for (int i = 0; i < TEST_ITERS; i++) {
-            concurrent_diff_region<<<nblocks, block_size>>>(d_data, region_size, region_offset, d_output, d_timing);
-        }
-        cudaEventRecord(stop);
-        cudaEventSynchronize(stop);
-        float diff_time;
-        cudaEventElapsedTime(&diff_time, start, stop);
-        diff_time /= TEST_ITERS;
-        
-        const char* inference = "";
-        float overhead = (diff_time - same_time) / same_time * 100;
-        if (overhead > 10) {
-            inference = "Stitch 带宽竞争";
-        } else if (overhead > 5) {
-            inference = "轻微 Stitch 开销";
-        } else {
-            inference = "无明显影响";
-        }
-        
-        printf("%5d     %.3f        %.3f          %+.1f%%     %s\n",
-               nblocks, same_time, diff_time, overhead, inference);
-    }
-    
-    // ============================================================
-    printf("\n");
-    print_separator();
-    printf("实验2: 访问粒度对 Stitch 的影响\n");
+    printf("实验1: 访问粒度对 Stitch 的影响\n");
     print_separator();
     printf("理论: 非 Coalesced 访问更容易触发跨 Partition 访问\n\n");
     
-    // 修复: 统一数据足迹为 L2 大小，避免 DRAM 访问干扰
-    size_t test_footprint = l2_size / sizeof(float);  // 60 MB = L2
+    // 数据足迹为 L2/2 = 30MB，确保全部在 L2 缓存内，专注测试访问模式差异
+    size_t test_footprint = l2_half / sizeof(float);  // 30 MB = L2/2
     
     printf("访问模式          时间(ms)      相对 Coalesced    预期 Stitch\n");
     printf("------------------------------------------------------------------------\n");
-    printf("(数据足迹统一为 %.0f MB = L2 大小)\n\n", l2_size / 1024.0 / 1024.0);
+    printf("(数据足迹统一为 %.0f MB = L2/2，确保全部缓存命中)\n\n", l2_half / 1024.0 / 1024.0);
     
     // Coalesced
     coalesced_access<<<num_blocks, block_size>>>(d_data, test_footprint, d_output);
@@ -648,180 +460,147 @@ int main() {
     printf("random            %.3f         %.2fx             最高\n", rand_time, rand_time / coal_time);
     
     // ============================================================
+    // 实验2: Stride 对 L2 Slice 分布影响
+    // ============================================================
+    printf("\n");
+    print_separator();
+    printf("实验2: Stride 对 L2 Slice 分布影响\n");
+    print_separator();
+    printf("假设: 特定 stride (如 2^N) 可能导致地址集中在同一 L2 slice\n");
+    printf("      而顺序(stride=1)或质数 stride 能更好地分散\n");
+    printf("多次遍历测量 L2 hit rate\n\n");
+    
+    // 使用较小数据集，多次遍历测 hit rate
+    size_t slice_test_size = 8 * 1024 * 1024 / sizeof(float);  // 8 MB，远小于 L2
+    int slice_iterations = 10;  // 多次遍历测量 hit rate
+    
+    printf("数据大小: 8 MB (远小于 L2 60MB)\n");
+    printf("遍历次数: %d (测量 L2 hit rate)\n\n", slice_iterations);
+    
+    printf("Stride 值          Stride(KB)    时间(ms)      相对顺序      推测 Slice 分布\n");
+    printf("--------------------------------------------------------------------------------\n");
+    
+    // 测试的 stride 值: 顺序, 2^N (可能冲突), 质数 (分散)
+    std::vector<std::pair<const char*, size_t>> stride_tests = {
+        {"顺序 (1)",        1},
+        {"2^6 (64)",        64},
+        {"2^8 (256)",       256},
+        {"2^10 (1K)",       1024},
+        {"2^12 (4K)",       4096},
+        {"2^14 (16K)",      16384},
+        {"2^16 (64K)",      65536},
+        {"质数 (1021)",     1021},
+        {"质数 (4093)",     4093},
+        {"质数 (16381)",    16381},
+        {"质数 (65521)",    65521},
+    };
+    
+    // 先跑顺序作为基准
+    stride_slice_test<<<num_blocks, block_size>>>(d_data, slice_test_size, 1, slice_iterations, d_output);
+    CUDA_CHECK(cudaDeviceSynchronize());
+    
+    cudaEventRecord(start);
+    for (int i = 0; i < TEST_ITERS; i++) {
+        stride_slice_test<<<num_blocks, block_size>>>(d_data, slice_test_size, 1, slice_iterations, d_output);
+    }
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+    float base_slice_time;
+    cudaEventElapsedTime(&base_slice_time, start, stop);
+    base_slice_time /= TEST_ITERS;
+    
+    for (auto& test : stride_tests) {
+        const char* name = test.first;
+        size_t stride = test.second;
+        
+        // Warmup
+        stride_slice_test<<<num_blocks, block_size>>>(d_data, slice_test_size, stride, slice_iterations, d_output);
+        CUDA_CHECK(cudaDeviceSynchronize());
+        
+        cudaEventRecord(start);
+        for (int i = 0; i < TEST_ITERS; i++) {
+            stride_slice_test<<<num_blocks, block_size>>>(d_data, slice_test_size, stride, slice_iterations, d_output);
+        }
+        cudaEventRecord(stop);
+        cudaEventSynchronize(stop);
+        float slice_time;
+        cudaEventElapsedTime(&slice_time, start, stop);
+        slice_time /= TEST_ITERS;
+        
+        float ratio = slice_time / base_slice_time;
+        const char* distribution = "";
+        if (ratio > 1.5) {
+            distribution = "★★★ 严重集中 (slice 冲突)";
+        } else if (ratio > 1.2) {
+            distribution = "★★ 部分集中";
+        } else if (ratio > 1.05) {
+            distribution = "★ 轻微集中";
+        } else {
+            distribution = "均匀分散";
+        }
+        
+        printf("%-18s %8.1f      %.3f         %.2fx         %s\n", 
+               name, stride * sizeof(float) / 1024.0, slice_time, ratio, distribution);
+    }
+    
+    printf("\n结论: 如果 2^N stride 明显慢于质数 stride，说明 L2 slice 映射与 2^N 对齐\n");
+    
+    // ============================================================
     // 实验3: 多 Buffer 场景 (模拟 Attention Q, K, V)
     // ============================================================
+    // 复用 effective_l2_test，iteration=1，测试冷访问
     printf("\n");
     print_separator();
     printf("实验3: 多 Buffer 场景 (模拟 Attention Q, K, V)\n");
     print_separator();
-    printf("理论: N 个独立 buffer = N 倍唯一地址 = N 倍 Fabric Miss\n");
-    printf("       这解释了 Attention 等多矩阵运算为什么 Stitch 高\n\n");
+    printf("理论: 数据足迹增大 = 更多 Fabric Miss\n");
+    printf("       这解释了 Attention 等多矩阵运算为什么 Stitch 高\n");
+    printf("复用 effective_l2_test，iteration=1，测试冷访问\n\n");
     
-    // 分配多个独立 buffer
-    float *d_bufA, *d_bufB, *d_bufC, *d_bufD;
-    size_t buf_size = 16 * 1024 * 1024;  // 每个 buffer 16 MB
-    size_t buf_elements = buf_size / sizeof(float);
-    
-    CUDA_CHECK(cudaMalloc(&d_bufA, buf_size));
-    CUDA_CHECK(cudaMalloc(&d_bufB, buf_size));
-    CUDA_CHECK(cudaMalloc(&d_bufC, buf_size));
-    CUDA_CHECK(cudaMalloc(&d_bufD, buf_size));
-    CUDA_CHECK(cudaMemset(d_bufA, 1, buf_size));
-    CUDA_CHECK(cudaMemset(d_bufB, 2, buf_size));
-    CUDA_CHECK(cudaMemset(d_bufC, 3, buf_size));
-    CUDA_CHECK(cudaMemset(d_bufD, 4, buf_size));
-    
-    printf("Buffer 数量     时间(ms)      相对 1 Buffer    Stitch 预期\n");
+    printf("数据足迹       时间(ms)      相对 10MB     Stitch 预期\n");
     printf("------------------------------------------------------------------------\n");
-    printf("(每个 Buffer = 16 MB)\n\n");
     
-    // 1 buffer
-    single_buffer_access<<<num_blocks, block_size>>>(d_bufA, buf_elements, d_output);
-    CUDA_CHECK(cudaDeviceSynchronize());
+    std::vector<size_t> buf_tests_mb = {10, 20, 30, 40, 50, 60};
+    float base_buf_time = 0.0f;
     
-    cudaEventRecord(start);
-    for (int i = 0; i < TEST_ITERS; i++) {
-        single_buffer_access<<<num_blocks, block_size>>>(d_bufA, buf_elements, d_output);
+    for (size_t buf_mb : buf_tests_mb) {
+        size_t buf_elements = buf_mb * 1024 * 1024 / sizeof(float);
+        
+        // Warmup
+        effective_l2_test<<<num_blocks, block_size>>>(d_data, buf_elements, 1, d_output);
+        CUDA_CHECK(cudaDeviceSynchronize());
+        
+        cudaEventRecord(start);
+        for (int i = 0; i < TEST_ITERS; i++) {
+            effective_l2_test<<<num_blocks, block_size>>>(d_data, buf_elements, 1, d_output);
+        }
+        cudaEventRecord(stop);
+        cudaEventSynchronize(stop);
+        float buf_time;
+        cudaEventElapsedTime(&buf_time, start, stop);
+        buf_time /= TEST_ITERS;
+        
+        if (buf_mb == 10) {
+            base_buf_time = buf_time;
+        }
+        
+        const char* inference = "";
+        if (buf_mb <= 30) {
+            inference = "< L2/2, 高效缓存";
+        } else {
+            inference = "> L2/2, 跨 uGPU 访问";
+        }
+        
+        printf("%6zu MB       %.3f         %.2fx         %s\n", 
+               buf_mb, buf_time, buf_time / base_buf_time, inference);
     }
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-    float buf1_time;
-    cudaEventElapsedTime(&buf1_time, start, stop);
-    buf1_time /= TEST_ITERS;
-    printf("1 Buffer        %.3f         1.00x            基准\n", buf1_time);
-    
-    // 2 buffers
-    dual_buffer_access<<<num_blocks, block_size>>>(d_bufA, d_bufB, buf_elements, d_output);
-    CUDA_CHECK(cudaDeviceSynchronize());
-    
-    cudaEventRecord(start);
-    for (int i = 0; i < TEST_ITERS; i++) {
-        dual_buffer_access<<<num_blocks, block_size>>>(d_bufA, d_bufB, buf_elements, d_output);
-    }
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-    float buf2_time;
-    cudaEventElapsedTime(&buf2_time, start, stop);
-    buf2_time /= TEST_ITERS;
-    printf("2 Buffers       %.3f         %.2fx            2x Fabric Miss\n", buf2_time, buf2_time / buf1_time);
-    
-    // 3 buffers (Q, K, V)
-    triple_buffer_access<<<num_blocks, block_size>>>(d_bufA, d_bufB, d_bufC, buf_elements, d_output);
-    CUDA_CHECK(cudaDeviceSynchronize());
-    
-    cudaEventRecord(start);
-    for (int i = 0; i < TEST_ITERS; i++) {
-        triple_buffer_access<<<num_blocks, block_size>>>(d_bufA, d_bufB, d_bufC, buf_elements, d_output);
-    }
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-    float buf3_time;
-    cudaEventElapsedTime(&buf3_time, start, stop);
-    buf3_time /= TEST_ITERS;
-    printf("3 Buffers (QKV) %.3f         %.2fx            3x Fabric Miss\n", buf3_time, buf3_time / buf1_time);
-    
-    // 4 buffers
-    quad_buffer_access<<<num_blocks, block_size>>>(d_bufA, d_bufB, d_bufC, d_bufD, buf_elements, d_output);
-    CUDA_CHECK(cudaDeviceSynchronize());
-    
-    cudaEventRecord(start);
-    for (int i = 0; i < TEST_ITERS; i++) {
-        quad_buffer_access<<<num_blocks, block_size>>>(d_bufA, d_bufB, d_bufC, d_bufD, buf_elements, d_output);
-    }
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-    float buf4_time;
-    cudaEventElapsedTime(&buf4_time, start, stop);
-    buf4_time /= TEST_ITERS;
-    printf("4 Buffers       %.3f         %.2fx            4x Fabric Miss\n", buf4_time, buf4_time / buf1_time);
-    
-    CUDA_CHECK(cudaFree(d_bufA));
-    CUDA_CHECK(cudaFree(d_bufB));
-    CUDA_CHECK(cudaFree(d_bufC));
-    CUDA_CHECK(cudaFree(d_bufD));
     
     // ============================================================
-    // 实验4: 带宽压力测试
+    // 实验4: 有效 L2 容量测试
     // ============================================================
     printf("\n");
     print_separator();
-    printf("实验4: Stitch 带宽瓶颈测试\n");
-    print_separator();
-    printf("理论: 高带宽压力下，Stitch 路径 (~100 cycles) 成为瓶颈\n");
-    printf("方法: 使用大质数步长/hash确保地址在L2 partition间均匀分散\n");
-    printf("      - 本地顺序: coalesced访问，同cache line，最大化本地L2带宽\n");
-    printf("      - 大步长:   prime_stride=8MB，强制跨partition\n");
-    printf("      - 随机hash: Knuth hash分散地址，最大化跨partition\n\n");
-    
-    printf("访问模式          时间(ms)      带宽(GB/s)      预期瓶颈\n");
-    printf("------------------------------------------------------------------------\n");
-    
-    size_t bw_test_size = l2_size / sizeof(float);  // 60 MB
-    size_t bw_bytes = l2_size;
-    
-    // 大质数步长 (~8MB)，确保地址在 L2 hash 空间均匀分散
-    size_t prime_stride = 8388617;  // 大质数，约 8MB
-    
-    // 本地带宽测试 (coalesced 访问)
-    bandwidth_local<<<num_blocks * 2, block_size>>>(d_data, bw_test_size, d_output);
-    CUDA_CHECK(cudaDeviceSynchronize());
-    
-    cudaEventRecord(start);
-    for (int i = 0; i < TEST_ITERS; i++) {
-        bandwidth_local<<<num_blocks * 2, block_size>>>(d_data, bw_test_size, d_output);
-    }
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-    float local_bw_time;
-    cudaEventElapsedTime(&local_bw_time, start, stop);
-    local_bw_time /= TEST_ITERS;
-    float local_bw = bw_bytes / (local_bw_time * 1e6);  // GB/s
-    printf("本地顺序读      %.3f         %.1f           L2 带宽 (coalesced)\n", local_bw_time, local_bw);
-    
-    // 跨 partition 带宽测试 (大质数步长)
-    bandwidth_cross_region<<<num_blocks * 2, block_size>>>(d_data, bw_test_size, prime_stride, d_output);
-    CUDA_CHECK(cudaDeviceSynchronize());
-    
-    cudaEventRecord(start);
-    for (int i = 0; i < TEST_ITERS; i++) {
-        bandwidth_cross_region<<<num_blocks * 2, block_size>>>(d_data, bw_test_size, prime_stride, d_output);
-    }
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-    float cross_bw_time;
-    cudaEventElapsedTime(&cross_bw_time, start, stop);
-    cross_bw_time /= TEST_ITERS;
-    // 计算带宽: num_blocks*2 * block_size 线程 * ITERATIONS 次访问 * 4 bytes
-    size_t cross_bytes = (size_t)num_blocks * 2 * block_size * ITERATIONS * sizeof(float);
-    float cross_bw = cross_bytes / (cross_bw_time * 1e6);  // GB/s
-    printf("大步长跨分区    %.3f         %.1f           Stitch 带宽 (prime stride)\n", cross_bw_time, cross_bw);
-    
-    // 带宽压力测试 (随机 hash 访问)
-    bandwidth_stress_test<<<num_blocks * 4, block_size>>>(d_data, buffer_elements, d_output);
-    CUDA_CHECK(cudaDeviceSynchronize());
-    
-    cudaEventRecord(start);
-    for (int i = 0; i < TEST_ITERS; i++) {
-        bandwidth_stress_test<<<num_blocks * 4, block_size>>>(d_data, buffer_elements, d_output);
-    }
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-    float stress_time;
-    cudaEventElapsedTime(&stress_time, start, stop);
-    stress_time /= TEST_ITERS;
-    size_t stress_bytes = (size_t)num_blocks * 4 * block_size * ITERATIONS * sizeof(float);
-    float stress_bw = stress_bytes / (stress_time * 1e6);
-    printf("随机hash访问    %.3f         %.1f           Stitch 瓶颈 (hash)\n", stress_time, stress_bw);
-    
-    float bw_overhead = (cross_bw_time - local_bw_time) / local_bw_time * 100;
-    printf("\n跨区域 vs 本地开销: %+.1f%%\n", bw_overhead);
-    
-    // ============================================================
-    // 实验5: 有效 L2 容量测试
-    // ============================================================
-    printf("\n");
-    print_separator();
-    printf("实验5: 有效 L2 容量测试\n");
+    printf("实验4: 有效 L2 容量测试\n");
     print_separator();
     printf("理论: 由于 Stitch，有效 L2 容量约为 L2/2\n");
     printf("       超过此阈值后，性能显著下降\n\n");
@@ -1053,70 +832,6 @@ int main() {
         
         CUDA_CHECK(cudaFree(d_random_idx));
         CUDA_CHECK(cudaFree(d_sorted_idx));
-    }
-    
-    // ============================================================
-    // 对比实验D: 高并发下的 Stitch 瓶颈
-    // ============================================================
-    printf("\n");
-    print_separator();
-    printf("【对比实验D】高并发下的 Stitch 瓶颈\n");
-    print_separator();
-    printf("场景: 固定总访问量，增加并发 block 数\n");
-    printf("预期: 高并发时 Stitch 带宽成为瓶颈，性能下降更明显\n\n");
-    
-    {
-        printf("Block数   同区域(ms)   跨区域(ms)    Stitch开销    瓶颈程度\n");
-        printf("------------------------------------------------------------------------\n");
-        
-        std::vector<int> test_block_counts = {16, 64, 128, 256, 512};
-        
-        for (int nblocks : test_block_counts) {
-            // 同区域访问
-            concurrent_same_region<<<nblocks, block_size>>>(d_data, region_size, d_output, d_timing);
-            CUDA_CHECK(cudaDeviceSynchronize());
-            
-            cudaEventRecord(start);
-            for (int i = 0; i < TEST_ITERS; i++) {
-                concurrent_same_region<<<nblocks, block_size>>>(d_data, region_size, d_output, d_timing);
-            }
-            cudaEventRecord(stop);
-            cudaEventSynchronize(stop);
-            float same_time;
-            cudaEventElapsedTime(&same_time, start, stop);
-            same_time /= TEST_ITERS;
-            
-            // 跨区域访问
-            concurrent_diff_region<<<nblocks, block_size>>>(d_data, region_size, region_offset, d_output, d_timing);
-            CUDA_CHECK(cudaDeviceSynchronize());
-            
-            cudaEventRecord(start);
-            for (int i = 0; i < TEST_ITERS; i++) {
-                concurrent_diff_region<<<nblocks, block_size>>>(d_data, region_size, region_offset, d_output, d_timing);
-            }
-            cudaEventRecord(stop);
-            cudaEventSynchronize(stop);
-            float diff_time;
-            cudaEventElapsedTime(&diff_time, start, stop);
-            diff_time /= TEST_ITERS;
-            
-            float overhead = (diff_time - same_time) / same_time * 100;
-            const char* bottleneck = "";
-            if (overhead > 40) {
-                bottleneck = "★★★ 严重瓶颈";
-            } else if (overhead > 20) {
-                bottleneck = "★★ 明显瓶颈";
-            } else if (overhead > 10) {
-                bottleneck = "★ 轻微瓶颈";
-            } else {
-                bottleneck = "无瓶颈";
-            }
-            
-            printf("%5d     %.3f        %.3f         %+5.1f%%        %s\n",
-                   nblocks, same_time, diff_time, overhead, bottleneck);
-        }
-        
-        printf("\n结论: 高并发 + 跨区域访问 = Stitch 带宽瓶颈\n");
     }
     
     // ============================================================
